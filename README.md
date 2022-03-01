@@ -21,7 +21,7 @@ When using composer and php:
 * Clone this repository
 * `cd` to the repo
 * `composer install`
-* Launch: `php rover.php`
+* Launch: `php application cities:forecast_for_next_two_days`
 
 ## Usage
 
