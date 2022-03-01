@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker-compose exec php php application cities:forecast_for_next_two_days $@

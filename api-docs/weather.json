@@ -1,0 +1,440 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "TUI Weather API",
+    "version": "1.0",
+    "x-logo": {
+      "url": ""
+    },
+    "description": "A proposal for a weather API for TUI",
+    "contact": {
+      "name": "Álvaro Martínez i Majado"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://example.org"
+    }
+  ],
+  "paths": {
+    "/api/v3/cities/weather": {
+      "summary": "Update weather records for multiple cities",
+      "post": {
+        "tags": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/MultipleCitiesAndDates"
+        },
+        "parameters": [],
+        "operationId": "postWeatherMultiple",
+        "description": "Record cities and their weather at multiple dates in bulk"
+      },
+      "x-last-modified": 1646150939097,
+      "get": {
+        "summary": "",
+        "operationId": "get-api-v3-cities-weather",
+        "description": "List of all available cities, with all the weather records for every date",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "date",
+            "description": "Filter by a certain date in yyyymmdd format"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "cityId",
+            "description": "Filter by a certain city ID as identified by TUI's API"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "citiesAndDates": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "record": {
+                                "type": "object",
+                                "required": [
+                                  "cityId",
+                                  "date",
+                                  "weather"
+                                ],
+                                "description": "A single record for a city in a date",
+                                "properties": {
+                                  "cityId": {
+                                    "type": "number",
+                                    "description": "A city ID as returned by the cities TUI API"
+                                  },
+                                  "date": {
+                                    "type": "string",
+                                    "description": "A date in the format yyyymmdd"
+                                  },
+                                  "weather": {
+                                    "type": "string",
+                                    "description": "The weather condition as returned by the external API"
+                                  }
+                                }
+                              }
+                            },
+                            "required": [
+                              "record"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Returned list of cities, dates and weather": {
+                    "value": {
+                      "schema": {
+                        "citiesAndDates": [
+                          {
+                            "record": {
+                              "cityId": 60,
+                              "date": "20210301",
+                              "weather": "Cloudy"
+                            }
+                          },
+                          {
+                            "record": {
+                              "cityId": 61,
+                              "date": "20210301",
+                              "weather": "Sunny"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/v3/cities/{id}/weather/{date}": {
+      "summary": "Record a specific weather for a specific city in a date",
+      "put": {
+        "tags": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The city ID as returned by TUI's API"
+          },
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The date of the record in yyyymmdd format"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "operationId": "putSingleRecord",
+        "description": "Adds one record for a single city and date"
+      },
+      "x-last-modified": 1646152132738,
+      "get": {
+        "summary": "",
+        "operationId": "get-api-v3-cities-id-weather-date",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The city ID as returned by TUI's API"
+          },
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The date of the record in yyyymmdd format"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "condition": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Example of a weather condition for a given day in a given city": {
+                    "value": {
+                      "condition": "Sunny"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieve the weather condition for a single city at a given day"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "IllegalInputError": {
+        "required": [
+          "message",
+          "code"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "maximum": 400,
+            "minimum": 400,
+            "type": "integer"
+          }
+        },
+        "x-last-modified": 1646151777669
+      },
+      "UnauthorizedError": {
+        "required": [
+          "message",
+          "code"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "maximum": 401,
+            "minimum": 401,
+            "type": "integer"
+          }
+        },
+        "x-last-modified": 1646151798304
+      },
+      "ServerError": {
+        "required": [
+          "message",
+          "code"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "maximum": 599,
+            "minimum": 500,
+            "type": "integer"
+          }
+        },
+        "x-last-modified": 1646151814101
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Operation succeeded",
+        "x-last-modified": 1646151775445
+      },
+      "400": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/IllegalInputError"
+            }
+          }
+        },
+        "description": "Bad input",
+        "x-last-modified": 1646151794681
+      },
+      "401": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedError"
+            }
+          }
+        },
+        "description": "Unauthorized",
+        "x-last-modified": 1646151813120
+      },
+      "403": {
+        "description": "Bad credentials",
+        "x-last-modified": 1646151848762
+      },
+      "500": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ServerError"
+            }
+          }
+        },
+        "description": "Internal Server Error",
+        "x-last-modified": 1646151825293
+      }
+    },
+    "securitySchemes": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {
+      "MultipleCitiesAndDates": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "citiesAndDates": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "record": {
+                        "type": "object",
+                        "required": [
+                          "cityId",
+                          "date",
+                          "weather"
+                        ],
+                        "description": "A single record for a city in a date",
+                        "properties": {
+                          "cityId": {
+                            "type": "number",
+                            "description": "A city ID as returned by the cities TUI API"
+                          },
+                          "date": {
+                            "type": "string",
+                            "description": "A date in the format yyyymmdd"
+                          },
+                          "weather": {
+                            "type": "string",
+                            "description": "The weather condition as returned by the external API"
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "record"
+                    ]
+                  }
+                }
+              }
+            },
+            "examples": {
+              "Record multiple cities in multiple dates": {
+                "value": {
+                  "citiesAndDates": [
+                    {
+                      "record": {
+                        "cityId": 60,
+                        "date": "20210301",
+                        "weather": "Sunny"
+                      }
+                    },
+                    {
+                      "record": {
+                        "cityId": 61,
+                        "date": "20210301",
+                        "weather": "Cloudy"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Record multiple cities in multiple dates"
+      }
+    }
+  },
+  "tags": []
+}
