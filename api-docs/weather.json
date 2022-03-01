@@ -352,7 +352,18 @@
         "x-last-modified": 1646151825293
       }
     },
-    "securitySchemes": {},
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "",
+            "refreshUrl": "",
+            "scopes": {}
+          }
+        }
+      }
+    },
     "headers": {},
     "parameters": {},
     "requestBodies": {
@@ -436,5 +447,10 @@
       }
     }
   },
-  "tags": []
+  "tags": [],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ]
 }
